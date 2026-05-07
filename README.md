@@ -32,8 +32,13 @@ sudo mv kops /usr/local/bin/kops
 Configure .bashrc for k8s cluster
 
 export NAME=Ankitdevops.xyz 
+
 export KOPS_STATE_STORE=s3://Ankitdevops.xyz
+
 export AWS_REGION=us-east-1
+
 export CLUSTER_NAME=Ankit.xyz
+
 export EDITOR='/usr/bin/nano'
+
 alias ko='kubectl'
