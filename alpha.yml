@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: alpha2
+    app: nginx
+  name: alpha2
+  namespace: alpha
+spec:
+  containers:
+  - image: kiran2361993/kubegame:v1
+    name: alpha2
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: alpha3
+    app: nginx
+  name: alpha3
+  namespace: alpha
+spec:
+  containers:
+  - image: kiran2361993/kubegame:v1
+    name: alpha3
+
+-----
+
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: frontend
+  labels:
+    app: guestbook
+    tier: frontend
+spec:
+  # modify replicas according to your case
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: kubegame
+        image: kiran2361993/kubegame:v1

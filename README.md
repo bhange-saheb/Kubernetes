@@ -3,7 +3,7 @@
 Kubernetes is an open source container orchestration engine for automating deployment, scaling, and management of containerized applications. The open source project is hosted by the Cloud Native Computing Foundation (CNCF).
 
 
-## What is kOps?�
+## What is kOps?�
 We like to think of it as kubectl for clusters.
 
 kops will not only help you create, destroy, upgrade and maintain production-grade, highly available, Kubernetes cluster, but it will also provision the necessary cloud infrastructure.
@@ -16,7 +16,7 @@ chmod +x kops
 sudo mv kops /usr/local/bin/kops
 ```
 
-#kubectl
+## kubectl
 The Kubernetes command-line tool, kubectl, allows you to run commands against Kubernetes clusters. 
 You can use kubectl to deploy applications, inspect and manage cluster resources, and view logs.
 
@@ -28,6 +28,13 @@ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stabl
 chmod +x ./kubectl
 sudo mv ./kubectl /usr/local/bin/kubectl
 ```
+
+Generate key
+
+```bash
+ssh-keygen
+```
+Add Role to Server to perform activities (give s3 permission)
 
 Configure .bashrc for k8s cluster
 
@@ -43,9 +50,36 @@ export EDITOR='/usr/bin/nano'
 
 alias ko='kubectl'
 
-kops create cluster --name=komaldevops.xyz \
---state=s3://komaldevops.xyz  --zones=us-east-1a,us-east-1b \
+## After copying the above line to .bashrc run “ source .bashrc ” to reload the bash.
+
+## Create a Cluster using Kops and generate a cluster file and save it carefully and do neccessary changes
+
+kops create cluster --name=Ankitdevops.xyz \
+--state=s3://Ankitdevops.xyz  --zones=us-east-1a,us-east-1b \
 --node-count=2 --control-plane-count=1 --node-size=t3.medium --control-plane-size=t3.medium \
 --control-plane-zones=us-east-1a --control-plane-volume-size 10 --node-volume-size 10 \
---ssh-public-key ~/yes.pub \
+--ssh-public-key ~/.ssh/id_ed25519.pub \
 --dns-zone=komaldevops.xyz --dry-run --output yaml
+
+
+## To Create Cluster
+
+```bash
+ kops create -f cluster.yaml 
+ ```
+
+## To update and validate cluster
+
+```bash 
+kops update cluster --name komaldevops.xyz --yes
+```
+
+```bash
+ kops validate cluster --wait 15m 
+ ```
+
+To Delete cluster
+```bash 
+kops delete -f cluster.yaml  --yes
+```
+

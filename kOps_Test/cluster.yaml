@@ -42,7 +42,7 @@ spec:
   - ::/0
   kubernetesVersion: 1.35.4
   masterPublicName: api.komaldevops.xyz
-  networkCIDR: 172.20.0.0/16
+  networkCIDR: 192.168.0.0/16
   networking:
     cilium:
       enableNodePort: true
@@ -51,11 +51,11 @@ spec:
   - 0.0.0.0/0
   - ::/0
   subnets:
-  - cidr: 172.20.0.0/17
+  - cidr: 192.168.1.0/24
     name: us-east-1a
     type: Public
     zone: us-east-1a
-  - cidr: 172.20.128.0/17
+  - cidr: 192.168.2.0/24
     name: us-east-1b
     type: Public
     zone: us-east-1b
@@ -73,7 +73,7 @@ metadata:
   name: control-plane-us-east-1a
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
-  machineType: t3.micro
+  machineType: t3.medium
   maxSize: 1
   minSize: 1
   role: Master
@@ -91,7 +91,7 @@ metadata:
   name: nodes-us-east-1a
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
-  machineType: t3.micro
+  machineType: t3.medium
   maxSize: 1
   minSize: 1
   role: Node
@@ -109,7 +109,7 @@ metadata:
   name: nodes-us-east-1b
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-20260218
-  machineType: t3.micro
+  machineType: t3.medium
   maxSize: 1
   minSize: 1
   role: Node
@@ -126,5 +126,5 @@ metadata:
     kops.k8s.io/cluster: komaldevops.xyz
   name: admin
 spec:
-  publicKey: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIBHw9WhJCBOS9Lq1JOn8gl4SzxziKe02HFbDZubpdSau
-    root@ip-192-168-11-17
+  publicKey: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPHwsbibQAjk+jptqKKEqatpsWOeVoZEDYTVhcylIj2a
+    root@ip-192-168-30-62
