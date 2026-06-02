@@ -1,0 +1,53 @@
+apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "user1" to read pods in the "development" namespace.
+# You need to already have a Role named "user1-role" in that namespace.
+kind: RoleBinding
+metadata:
+  name: user1-roleBinding
+  namespace: development
+subjects:
+# You can specify more than one "subject"
+- kind: User
+  name: user1 # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: user1-role # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+# This role binding allows "user1" to read pods in the "development" namespace.
+# You need to already have a Role named "user1-role" in that namespace.
+kind: RoleBinding
+metadata:
+  name: user2-roleBinding
+  namespace: production
+subjects:
+# You can specify more than one "subject"
+- kind: User
+  name: user2 # "name" is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  # "roleRef" specifies the binding to a Role / ClusterRole
+  kind: Role #this must be Role or ClusterRole
+  name: user2-role # this must match the name of the Role or ClusterRole you wish to bind to
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows "admin" to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  name: komal-admin-roleBinding
+subjects:
+- kind: User
+  name: komal # Name is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: komal-admin-role
+  apiGroup: rbac.authorization.k8s.io
+

@@ -1,0 +1,36 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: result-ingressroute
+spec:
+  entryPoints:
+    - websecure              # HTTPS entry point in Traefik
+  routes:
+  - match: Host(`result.komaldevops.xyz`)   # Host rule
+    kind: Rule
+    services:
+    - name: result           # Service name
+      port: 80               # Service port
+  tls:
+    secretName: nginx-tls-default   # TLS secret
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: vote-ingressroute
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`vote.komaldevops.xyz`)     # First host
+    kind: Rule
+    services:
+    - name: vote
+      port: 80
+  - match: Host(`www.komaldevops.xyz`)      # Second host
+    kind: Rule
+    services:
+    - name: vote
+      port: 80
+  tls:
+    secretName: nginx-tls-default           # TLS secret

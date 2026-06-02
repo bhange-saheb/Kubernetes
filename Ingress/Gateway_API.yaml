@@ -1,0 +1,54 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: nginx-gateway   # Gateway resource replaces ingressClass + controller
+spec:
+  gatewayClassName: nginx   # Equivalent to ingressClassName
+  listeners:
+  - name: https
+    protocol: HTTPS         # Listener for HTTPS traffic
+    port: 443
+    tls:
+      certificateRefs:
+      - name: nginx-tls-default   # TLS secret, same as Ingress
+    hostname: result.komaldevops.xyz   # Hostname for this listener
+    allowedRoutes:
+      namespaces:
+        from: Same   # Restrict routes to same namespace
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: result-route
+spec:
+  parentRefs:
+  - name: nginx-gateway   # Attach route to the Gateway above
+  hostnames:
+  - result.komaldevops.xyz   # Hostname matches Ingress rule
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix     # Equivalent to pathType: Prefix
+        value: /             # Path value
+    backendRefs:
+    - name: result          # Service name
+      port: 80              # Service port
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vote-route
+spec:
+  parentRefs:
+  - name: nginx-gateway
+  hostnames:
+  - vote.komaldevops.xyz     # First host
+  - www.komaldevops.xyz      # Second host
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: vote             # Service name
+      port: 80               # Service port

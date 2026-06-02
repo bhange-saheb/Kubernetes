@@ -71,7 +71,7 @@ kops create cluster --name=Ankitdevops.xyz \
 ## To update and validate cluster
 
 ```bash 
-kops update cluster --name komaldevops.xyz --yes
+kops update cluster --name komaldevops.xyz --yes --admin
 ```
 
 ```bash
@@ -82,4 +82,12 @@ To Delete cluster
 ```bash 
 kops delete -f cluster.yaml  --yes
 ```
+# Simple Way to generate YAML Manifest with deployment "
 
+```bash
+kubectl create deployment testapp --image ankit2507/dockerwordgame:v1 --dry-run -o yaml 
+```
+
+```bash
+kubectl expose deployment testapp --type=NodePort --port=80 
+```
