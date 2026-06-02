@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: containerd-troubleshooting
+  labels:
+    app: containerd-troubleshooting
+spec:
+  selector:
+    matchLabels:
+      app: containerd-troubleshooting
+  template:
+    metadata:
+      labels:
+        app: containerd-troubleshooting
+    spec:
+      containers:
+        - name: troubleshooting
+          image: ankit2507/troubleshooting:v1
+          securityContext:
+            privileged: true # Often required to interact with host-level sockets securely
+          volumeMounts:
+            - name: containerdsock
+              mountPath: /run/containerd/containerd.sock
+      volumes:
+        - name: containerdsock
+          hostPath:
+            path: /run/containerd/containerd.sock
+            type: Socket # Validates that this is a unix socket on the host
+
+#Because this is a DaemonSet, it will spin up one pod on every node in your cluster.

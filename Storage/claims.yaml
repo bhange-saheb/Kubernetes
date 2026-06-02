@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: database-pod
+spec:
+  containers:
+  - name: mysql
+    image: mysql:8.0
+    volumeMounts:
+    - name: mysql-persistent-storage
+      mountPath: /var/lib/mysql # Where MySQL saves data
+  volumes:
+  - name: mysql-persistent-storage
+    persistentVolumeClaim:
+      claimName: task-pv-claim2 # Binds the Pod to the PVC created above
