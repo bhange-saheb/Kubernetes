@@ -13,14 +13,14 @@ These policies specifically govern connections where a Pod is on at least one en
  
  ### How Entities are Identified
  A Pod's permitted network entities are defined using a combination of three identifiers:
-> * **Pods:** Specific Pods allowed to communicate (Note: A Pod can never block access to itself).
-> * **Namespaces:** Whole namespaces that are granted access.
-> * **IP Blocks:** Specific CIDR ranges (Note: Traffic to and from the Pod’s host Node is always allowed).
+* **Pods:** Specific Pods allowed to communicate (Note: A Pod can never block access to itself).
+* **Namespaces:** Whole namespaces that are granted access.
+* **IP Blocks:** Specific CIDR ranges (Note: Traffic to and from the Pod’s host Node is always allowed).
 
  ### How Policies are Defined
  
-> * **Pod/Namespace-based:** Uses **selectors** to filter which traffic is allowed to or from matching Pods.
-> * **IP-based:** Uses **CIDR ranges** to define strict IP block boundaries.
+ * **Pod/Namespace-based:** Uses **selectors** to filter which traffic is allowed to or from matching Pods.
+ * **IP-based:** Uses **CIDR ranges** to define strict IP block boundaries.
 
 ---
 
@@ -46,6 +46,6 @@ kubectl label ns qualityAssurance env=qa
 
 kubectl get pods -A -l 'env in (prod, dev, qa)' -o wide --no-headers
  ```
-> * all namespaces `-A`
-> * label flag `-l`
+* All namespaces `-A`
+* Label flag `-l`
 **Look across the entire cluster for in all namespace (-A) for any pods (get pods) tagged as production, development, or QA (-l 'env in...')**
