@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prod-tools
+  namespace: production
+  labels:
+    env: prod
+spec:
+  replicas: 2                     
+  selector:
+    matchLabels:
+      app: troubleshooting
+      env: prod
+  template:
+    metadata:
+      labels:
+        app: troubleshooting
+        env: prod
+    spec:
+      containers:
+      - name: tools
+        image: ankit2507/troubleshooting:v1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qa-tools
+  namespace: qualityAssurance
+  labels:
+    env: qa
+spec:
+  replicas: 2                     
+  selector:
+    matchLabels:
+      app: troubleshooting
+      env: qa
+  template:
+    metadata:
+      labels:
+        app: troubleshooting
+        env: qa
+    spec:
+      containers:
+      - name: tools
+        image: ankit2507/troubleshooting:v1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dev-tools
+  namespace: development
+  labels:
+    env: dev
+spec:
+  replicas: 2                     
+  selector:
+    matchLabels:
+      app: troubleshooting
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: troubleshooting
+        env: dev
+    spec:
+      containers:
+      - name: tools
+        image: ankit2507/troubleshooting:v1
