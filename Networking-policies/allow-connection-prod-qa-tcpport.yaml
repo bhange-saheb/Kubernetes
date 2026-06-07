@@ -1,0 +1,46 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-traffic-from-prod-to-qa-on-tcp8888
+  namespace: qualityassurance
+spec:
+  podSelector:
+    matchLabels:
+      env: qa
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              env: prod
+        - podSelector:
+            matchLabels:
+              env: prod
+      ports:
+        - protocol: TCP
+          port: 8888
+
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-traffic-from-prod-to-qa-on-tcp8888
+  namespace: production
+spec:
+  podSelector:
+    matchLabels:
+      env: prod
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              env: qa
+        - podSelector:
+            matchLabels:
+              env: qa
+      ports:
+        - protocol: TCP
+          port: 8888

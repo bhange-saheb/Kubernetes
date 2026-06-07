@@ -56,10 +56,10 @@ alias ko='kubectl'
 
 kops create cluster --name=Ankitdevops.xyz \
 --state=s3://Ankitdevops.xyz  --zones=us-east-1a,us-east-1b \
---node-count=2 --control-plane-count=1 --node-size=t3.medium --control-plane-size=t3.medium \
+--node-count=3 --control-plane-count=1 --node-size=t3.medium --control-plane-size=t3.medium \
 --control-plane-zones=us-east-1a --control-plane-volume-size 10 --node-volume-size 10 \
 --ssh-public-key ~/.ssh/id_ed25519.pub \
---dns-zone=komaldevops.xyz --dry-run --output yaml
+--dns-zone=Ankitdevops.xyz --dry-run --output yaml
 
 
 ## To Create Cluster
@@ -71,7 +71,7 @@ kops create cluster --name=Ankitdevops.xyz \
 ## To update and validate cluster
 
 ```bash 
-kops update cluster --name komaldevops.xyz --yes --admin
+kops update cluster --name Ankitdevops.xyz --yes --admin
 ```
 
 ```bash

@@ -24,19 +24,31 @@ These policies specifically govern connections where a Pod is on at least one en
 
 ---
 
+## Deploying cluster with calico for private networking
+
+```bash
+kops create cluster --name=Ankitdevops.xyz \
+--state=s3://Ankitdevops.xyz  --zones=us-east-1a,us-east-1b \
+--node-count=3 --control-plane-count=1 --node-size=t3.medium --control-plane-size=t3.medium \
+--control-plane-zones=us-east-1a --control-plane-volume-size 10 --node-volume-size 10 \
+--topology private --networking calico \
+--ssh-public-key ~/.ssh/id_ed25519.pub \
+--dns-zone=Ankitdevops.xyz --yes
+```
+
 ## Follow Below Step to achieve the Network policy task or play with networks.
 
  **STEP 1** Create Namespaces for resource isolation and more access control
 ```bash
 kubectl create ns production
 kubectl create ns development
-kubectl create ns qualityAssurance
+kubectl create ns qualityassurance
 ```
  **STEP 2** Apply Labels to Namespaces to restrict/control traffic between namespaces
 ```bash
 kubectl label ns production env=prod
 kubectl label ns development env=dev
-kubectl label ns qualityAssurance env=qa
+kubectl label ns qualityassurance env=qa
 ```
  **STEP 3** Deploy the pods in all namespaces and check the IPs
  
@@ -49,3 +61,31 @@ kubectl get pods -A -l 'env in (prod, dev, qa)' -o wide --no-headers
 * All namespaces `-A`
 * Label flag `-l`
 **Look across the entire cluster for in all namespace (-A) for any pods (get pods) tagged as production, development, or QA (-l 'env in...')**
+
+ **STEP 4** Check Connection between all pods from all namespace
+
+`production pods to development and qualityassurance pods`
+
+ ```bash
+kubectl exec -it prod-tools-56d9b959f5-d5d8x -n production -- ping -c 3 100.116.152.197 \
+&& kubectl exec -it prod-tools-56d9b959f5-d6mgh -n production -- ping -c 3 100.127.239.197 \
+&& kubectl exec -it prod-tools-56d9b959f5-d5d8x -n production -- ping -c 3 100.109.134.3 \
+&& kubectl exec -it prod-tools-56d9b959f5-d6mgh -n production -- ping -c 3 100.116.152.198
+```
+
+`development pods to production and qualityassurance pods`
+
+```bash
+kubectl exec -it dev-tools-58b98fcd4c-jrzsb -n development -- ping -c 3 100.116.152.196 \
+&& kubectl exec -it dev-tools-58b98fcd4c-nfm2s -n development -- ping -c 3 100.127.239.196 \
+&& kubectl exec -it dev-tools-58b98fcd4c-jrzsb -n development -- ping -c 3 100.109.134.3 \
+&& kubectl exec -it dev-tools-58b98fcd4c-nfm2s -n development -- ping -c 3 100.116.152.198 
+```
+`qualityassurance pods to production and development pods`
+
+```bash
+kubectl exec -it qa-tools-7fdcc59f58-l5j5l -n qualityassurance -- ping -c 3 100.116.152.196 \
+&& kubectl exec -it qa-tools-7fdcc59f58-ldthr -n qualityassurance -- ping -c 3 100.127.239.196 \
+&& kubectl exec -it qa-tools-7fdcc59f58-l5j5l -n qualityassurance -- ping -c 3 100.116.152.197 \
+&& kubectl exec -it qa-tools-7fdcc59f58-ldthr -n qualityassurance -- ping -c 3 100.127.239.197
+```
