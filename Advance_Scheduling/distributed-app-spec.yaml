@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-frontend
+  labels:
+    app: web-frontend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-frontend
+  template:
+    metadata:
+      labels:
+        app: web-frontend
+    spec:
+      containers:
+        - name: frontend-container
+          image: ankit2507/dockerwordgame:v1 # Using your game image
+          ports:
+            - containerPort: 80
+      
+      # Frontend Availability Rules
+      affinity:
+        # Spread frontend replicas across different Availability Zones
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - web-frontend
+              topologyKey: "topology.kubernetes.io/zone"
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: distributed-backend
+  labels:
+    app: distributed-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: distributed-backend
+  template:
+    metadata:
+      labels:
+        app: distributed-backend
+    spec:
+      containers:
+        - name: app-container
+          image: ankit2507/dockerwordgame:v1
+          ports:
+            - containerPort: 80
+
+      # Advanced Scheduling Rules
+      affinity:
+        # 1. Pod Anti-Affinity: Spread replicas across different nodes
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - distributed-backend
+              topologyKey: "kubernetes.io/hostname"
+
+        # 2. Pod Affinity: Keep backend close to the frontend services
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - web-frontend
+                topologyKey: "topology.kubernetes.io/zone"

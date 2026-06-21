@@ -1,0 +1,76 @@
+#Forced Deployement only on selected/desired nodes
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: compulsory-required
+  name: compulsory-required
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      run: compulsory-required
+  template:
+    metadata:
+      labels:
+        run: compulsory-required
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: service-tier
+                    operator: In
+                    values:
+                      - gold
+                      - silver
+      containers:
+        - image: nginx:latest
+          name: compulsory-required
+---
+#Prefered Deployement only on selected/desired nodes nodes that meet the criteria,
+#but if none are available, they’ll still be scheduled elsewhere. This makes it a soft constraint.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: preferred-soft
+  name: preferred-soft
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      run: preferred-soft
+  template:
+    metadata:
+      labels:
+        run: preferred-soft
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 50
+              preference:
+                matchExpressions:
+                  - key: service-tier
+                    operator: In
+                    values:
+                      - gold
+            - weight: 40
+              preference:
+                matchExpressions:
+                  - key: service-tier
+                    operator: In
+                    values:
+                      - silver
+            - weight: 10
+              preference:
+                matchExpressions:
+                  - key: service-tier
+                    operator: In
+                    values:
+                      - bronze
+      containers:
+        - image: nginx
+          name: prefer-test

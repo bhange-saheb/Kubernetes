@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: secure-app-deployment
+  labels:
+    app: secure-app
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: secure-app
+  template:
+    metadata:
+      labels:
+        app: secure-app
+    spec:
+      containers:
+        - name: secure-worker
+          image: ankit2507/dockerwordgame:v1
+          ports:
+            - containerPort: 80
+      # The toleration below allows these pods to land on your tainted secure nodes
+      tolerations:
+        - key: "secure-zone"
+          operator: "Equal"
+          value: "restricted"
+          effect: "NoSchedule"

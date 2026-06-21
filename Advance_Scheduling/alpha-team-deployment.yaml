@@ -1,0 +1,46 @@
+#With node Id
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp01
+  name: myapp01
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp01
+  template:
+    metadata:
+      labels:
+        app: myapp01
+    spec:
+      containers:
+        - image: ankit2507/dockerwordgame:v1
+          name: dockerwordgame
+      nodeSelector:
+        kubernetes.io/hostname: i-0ccf306352be50aca #Node ID
+
+---
+#With Node Label
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp02
+  name: myapp02
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: myapp02
+  template:
+    metadata:
+      labels:
+        app: myapp02
+    spec:
+      containers:
+        - image: ankit2507/dockerwordgame:v1
+          name: dockerwordgame
+      nodeSelector:
+        project-owner: team-alpha #Node Label
