@@ -15,12 +15,13 @@ Deployments manage **ReplicaSets**, which in turn manage Pods. They allow you to
 ```bash
 
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
-  name: example-daemonset
+  name: example-deployment
   labels:
     app: example
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: example
@@ -37,7 +38,7 @@ spec:
 ### Apply the yaml manifest
 
 ```bash
-kubectl apply -f daemonset.yaml
+kubectl apply -f deployment.yaml
 ```
 or echo '
 data of yaml file' | kubectl -apply -f -
@@ -79,8 +80,8 @@ kubectl get pods -o wide
 ## Cleanup
 When finished, delete resources to free cluster capacity:
 ```bash
-kubectl delete deployment kubeapp
-kubectl delete svc kubeapp
+kubectl delete deployment example-deployment
+kubectl delete svc example-deployment-service
 ```
 
 

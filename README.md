@@ -3,6 +3,11 @@
 Kubernetes is an open source container orchestration engine for automating deployment, scaling, and management of containerized applications. The open source project is hosted by the Cloud Native Computing Foundation (CNCF).
 
 
+## K8s Architecture
+
+![Architecture-image](Kubernetes-Architecture-Diagram.jpeg)
+
+
 ## What is kOps?�
 We like to think of it as kubectl for clusters.
 
