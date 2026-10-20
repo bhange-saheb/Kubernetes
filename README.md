@@ -43,6 +43,7 @@ Add Role to Server to perform activities (give s3 permission)
 
 Configure .bashrc for k8s cluster
 
+```
 export NAME=Ankitdevops.xyz 
 
 export KOPS_STATE_STORE=s3://Ankitdevops.xyz
@@ -53,7 +54,8 @@ export CLUSTER_NAME=Ankit.xyz
 
 export EDITOR='/usr/bin/nano'
 
-alias ko='kubectl'
+alias ku='kubectl'
+```
 
 ## After copying the above line to .bashrc run “ source .bashrc ” to reload the bash.
 

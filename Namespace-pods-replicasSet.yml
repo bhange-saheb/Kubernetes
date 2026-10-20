@@ -1,32 +1,36 @@
 apiVersion: v1
-kind: Pod
+kind: Namespace
 metadata:
+  name: alpha
   labels:
-    run: alpha2
-    app: nginx
-  name: alpha2
-  namespace: alpha
-spec:
-  containers:
-  - image: kiran2361993/kubegame:v1
-    name: alpha2
-
+    env: testing
 ---
 apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    run: alpha3
+    run: game1
     app: nginx
-  name: alpha3
+  name: game1
   namespace: alpha
 spec:
   containers:
-  - image: kiran2361993/kubegame:v1
-    name: alpha3
-
------
-
+    - image: ankit2507/neon-snake-game:v1
+      name: neon-snake-game
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: game2
+    app: nginx
+  name: game2
+  namespace: alpha
+spec:
+  containers:
+    - image: ankit2507/neon-snake-game:v1
+      name: neon-snake-game
+---
 apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
@@ -46,5 +50,5 @@ spec:
         tier: frontend
     spec:
       containers:
-      - name: kubegame
-        image: kiran2361993/kubegame:v1
+        - name: kubegame
+          image: ankit2507/neon-snake-game:v1
