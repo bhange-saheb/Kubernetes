@@ -64,15 +64,15 @@ kubectl get pods -o wide
   ```
 - **Scale Deployment**:  
   ```bash
-  kubectl scale deployment kubeapp --replicas=10
+  kubectl scale deployment example-deployment --replicas=10
   ```
 - **Check rollout status**:  
   ```bash
-  kubectl rollout status deployment kubeapp
+  kubectl rollout status deployment example-deployment
   ```
 - **Delete Deployment**:  
   ```bash
-  kubectl delete deployment kubeapp
+  kubectl delete deployment example-deployment
   ```
 
 ---
