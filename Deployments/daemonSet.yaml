@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-log-agent
+  namespace: monitoring
+  labels:
+    app: node-log-agent
+spec:
+  selector:
+    matchLabels:
+      app: node-log-agent
+
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+
+  template:
+    metadata:
+      labels:
+        app: node-log-agent
+    spec:
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+
+      nodeSelector:
+        kubernetes.io/os: linux
+
+      tolerations:
+        - operator: Exists
+
+      containers:
+        - name: log-agent
+          image: fluent/fluent-bit:3.2.10
+          imagePullPolicy: IfNotPresent
+
+          args:
+            - --dry-run
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 10001
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
